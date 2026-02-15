@@ -25,15 +25,19 @@ if [ ! -f .env ]; then
     echo "⚠️  WARNING: .env file not found! Don't forget to add the env manually."
 fi
 
+echo "Building frontend for production..."
+npm run build
+
 echo "Managing Frontend PM2 process..."
 # Check if frontend process is running
 if pm2 list | grep -q "frontend"; then
-    echo "Frontend is running. Restarting..."
-    pm2 restart frontend
-else
-    echo "Frontend is not running. Starting..."
-    pm2 start npm --name "frontend" -- start
+    echo "Frontend is running. Delete old process to update serve..."
+    pm2 delete frontend
 fi
+
+echo "Starting Frontend as Static Server..."
+# Serve the 'dist' folder on port 5173 as a Single Page Application
+pm2 serve dist 5173 --name "frontend" --spa
 
 echo "Frontend Last 10 Logs:"
 pm2 logs frontend --lines 10 --nostream
