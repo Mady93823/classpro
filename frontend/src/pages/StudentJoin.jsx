@@ -332,28 +332,37 @@ const StudentJoin = () => {
 
     return (
         <div className="h-screen flex flex-col bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
-            {/* Compact Professional Status Bar */}
-            <div className="flex-shrink-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 text-white px-3 py-2 flex justify-between items-center shadow-lg">
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 bg-white/20 rounded-lg px-2.5 py-1 backdrop-blur-sm">
-                        <span className="text-xs">📚</span>
-                        <span className="text-xs font-bold tracking-wide">{formData.classCode}</span>
+            {/* Enhanced Professional Status Bar */}
+            <div className="flex-shrink-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 text-white px-3 py-2.5 flex justify-between items-center shadow-xl">
+                <div className="flex items-center gap-2.5">
+                    {/* Class Code - Distinguished with border */}
+                    <div className="flex items-center gap-1.5 bg-white/25 rounded-lg px-3 py-1.5 backdrop-blur-sm border-2 border-white/40 shadow-lg">
+                        <span className="text-sm font-black tracking-wider">{formData.classCode}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 bg-white/20 rounded-lg px-2.5 py-1 backdrop-blur-sm">
-                        <span className="text-xs">👤</span>
-                        <span className="text-xs font-medium truncate max-w-[120px]">{formData.studentName}</span>
+                    {/* Student Name - Softer style */}
+                    <div className="flex items-center gap-1.5 bg-white/15 rounded-lg px-2.5 py-1 backdrop-blur-sm">
+                        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-xs font-medium truncate max-w-[100px]">{formData.studentName}</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                    <div className={`px-2 py-0.5 rounded-md font-bold text-[10px] ${isConnected
-                        ? 'bg-green-500/90 shadow-green-500/50'
+                <div className="flex items-center gap-2">
+                    {/* Live Status - Prominent with pulse */}
+                    <div className={`relative px-2.5 py-1 rounded-lg font-bold text-xs ${isConnected
+                        ? 'bg-green-500 shadow-lg shadow-green-500/50'
                         : 'bg-red-500/90'
-                        } shadow-sm`}>
-                        {isConnected ? '● LIVE' : '● OFFLINE'}
+                        } border border-white/30`}>
+                        {isConnected && <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-300 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-100"></span>
+                        </span>}
+                        {isConnected ? 'LIVE' : 'OFFLINE'}
                     </div>
+                    {/* Exit Button - Clear action */}
                     <button
                         onClick={handleLogout}
-                        className="bg-white/20 hover:bg-white/30 rounded-md px-2 py-0.5 text-[10px] font-bold transition-all active:scale-95"
+                        className="bg-red-500/90 hover:bg-red-600 rounded-lg px-2.5 py-1 text-xs font-bold transition-all active:scale-95 border border-white/20 shadow-md"
                         title="Logout"
                     >
                         EXIT
