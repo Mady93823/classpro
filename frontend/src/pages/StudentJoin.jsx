@@ -331,86 +331,128 @@ const StudentJoin = () => {
     }
 
     return (
-        <div className="h-screen flex flex-col bg-gray-900">
-            {/* Status Bar */}
-            <div className="flex-shrink-0 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-4 py-3 flex justify-between items-center shadow-lg">
-                <div className="flex items-center gap-3">
-                    <div className="bg-white bg-opacity-20 rounded-lg px-3 py-1 backdrop-blur-sm">
-                        <span className="text-sm font-semibold">📚 {formData.classCode}</span>
+        <div className="h-screen flex flex-col bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
+            {/* Compact Professional Status Bar */}
+            <div className="flex-shrink-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 text-white px-3 py-2 flex justify-between items-center shadow-lg">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 bg-white/20 rounded-lg px-2.5 py-1 backdrop-blur-sm">
+                        <span className="text-xs">📚</span>
+                        <span className="text-xs font-bold tracking-wide">{formData.classCode}</span>
                     </div>
-                    <div className="bg-white bg-opacity-20 rounded-lg px-3 py-1 backdrop-blur-sm">
-                        <span className="text-sm font-medium">👤 {formData.studentName}</span>
+                    <div className="flex items-center gap-1.5 bg-white/20 rounded-lg px-2.5 py-1 backdrop-blur-sm">
+                        <span className="text-xs">👤</span>
+                        <span className="text-xs font-medium truncate max-w-[120px]">{formData.studentName}</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <div className={`px-3 py-1 rounded-lg font-medium text-xs ${isConnected
-                        ? 'bg-green-500 bg-opacity-90'
-                        : 'bg-red-500 bg-opacity-90'
-                        }`}>
-                        {isConnected ? '● Live' : '● Offline'}
+                <div className="flex items-center gap-1.5">
+                    <div className={`px-2 py-0.5 rounded-md font-bold text-[10px] ${isConnected
+                        ? 'bg-green-500/90 shadow-green-500/50'
+                        : 'bg-red-500/90'
+                        } shadow-sm`}>
+                        {isConnected ? '● LIVE' : '● OFFLINE'}
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg px-3 py-1 text-xs font-medium transition-all"
+                        className="bg-white/20 hover:bg-white/30 rounded-md px-2 py-0.5 text-[10px] font-bold transition-all active:scale-95"
                         title="Logout"
                     >
-                        🚪 Logout
+                        EXIT
                     </button>
                 </div>
             </div>
 
-            {/* Tab Navigation - THUMB ZONE (Easy to Reach) */}
-            <div className="flex-shrink-0 flex bg-gray-800 border-b border-gray-700 shadow-lg">
+            {/* Modern Tab Navigation */}
+            <div className="flex-shrink-0 flex bg-gradient-to-b from-slate-800 to-slate-900 border-b border-slate-700/50 shadow-xl">
                 {['html', 'css', 'preview'].map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`flex-1 py-4 text-base font-bold uppercase tracking-wide transition-all duration-300 transform active:scale-95 ${activeTab === tab
-                            ? 'bg-emerald-600 text-white shadow-lg'
-                            : 'bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700'
+                        className={`flex-1 py-3.5 text-sm font-bold uppercase tracking-wider transition-all duration-300 transform active:scale-95 relative ${activeTab === tab
+                            ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
+                            : 'bg-transparent text-slate-400 hover:text-white hover:bg-white/5'
                             }`}
-                        style={{ minHeight: '56px' }} // 48px+ touch target
+                        style={{ minHeight: '52px' }}
                     >
-                        {tab === 'html' && '📝 HTML'}
-                        {tab === 'css' && '🎨 CSS'}
-                        {tab === 'preview' && '👁️ Preview'}
+                        {tab === 'html' && (
+                            <span className="flex items-center justify-center gap-1.5">
+                                <span className="text-base">📝</span>
+                                <span>HTML</span>
+                            </span>
+                        )}
+                        {tab === 'css' && (
+                            <span className="flex items-center justify-center gap-1.5">
+                                <span className="text-base">🎨</span>
+                                <span>CSS</span>
+                            </span>
+                        )}
+                        {tab === 'preview' && (
+                            <span className="flex items-center justify-center gap-1.5">
+                                <span className="text-base">👁️</span>
+                                <span>PREVIEW</span>
+                            </span>
+                        )}
+                        {activeTab === tab && (
+                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-white rounded-t-full shadow-lg"></div>
+                        )}
                     </button>
                 ))}
             </div>
 
-            {/* Content Area */}
-            <div className="flex-1 overflow-hidden bg-gray-900">
-                {activeTab === 'html' && (
-                    <div className="h-full">
-                        <CodeEditor
-                            ref={htmlEditorRef}
-                            language="html"
-                            value={code.html}
-                            onChange={(value) => setCode({ ...code, html: value })}
-                        />
-                    </div>
-                )}
-                {activeTab === 'css' && (
-                    <div className="h-full">
-                        <CodeEditor
-                            ref={cssEditorRef}
-                            language="css"
-                            value={code.css}
-                            onChange={(value) => setCode({ ...code, css: value })}
-                        />
-                    </div>
-                )}
-                {activeTab === 'preview' && (
-                    <div className="h-full bg-white">
-                        <LivePreview html={code.html} css={code.css} />
-                    </div>
-                )}
+            {/* Quick Buttons Toolbar (TOP - Always Accessible) */}
+            {(activeTab === 'html' || activeTab === 'css') && (
+                <div className="flex-shrink-0 bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 border-b border-slate-700/30 shadow-lg">
+                    <MobileToolbar onInsert={handleInsert} />
+                </div>
+            )}
+
+            {/* Content Area with Depth */}
+            <div className="flex-1 overflow-hidden bg-gray-950 p-2">
+                <div className="h-full rounded-xl overflow-hidden shadow-2xl border border-slate-800/50">
+                    {activeTab === 'html' && (
+                        <div className="h-full bg-slate-900">
+                            <CodeEditor
+                                ref={htmlEditorRef}
+                                language="html"
+                                value={code.html}
+                                onChange={(value) => setCode({ ...code, html: value })}
+                            />
+                        </div>
+                    )}
+                    {activeTab === 'css' && (
+                        <div className="h-full bg-slate-900">
+                            <CodeEditor
+                                ref={cssEditorRef}
+                                language="css"
+                                value={code.css}
+                                onChange={(value) => setCode({ ...code, css: value })}
+                            />
+                        </div>
+                    )}
+                    {activeTab === 'preview' && (
+                        <div className="h-full bg-white">
+                            <LivePreview html={code.html} css={code.css} />
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* Mobile Toolbar - FIXED AT BOTTOM (Thumb Zone) */}
-            <div className="flex-shrink-0">
-                <MobileToolbar onInsert={handleInsert} />
-            </div>
+            <style>{`
+                /* Custom scrollbar for webkit browsers */
+                ::-webkit-scrollbar {
+                    width: 8px;
+                    height: 8px;
+                }
+                ::-webkit-scrollbar-track {
+                    background: rgba(15, 23, 42, 0.5);
+                }
+                ::-webkit-scrollbar-thumb {
+                    background: rgba(16, 185, 129, 0.5);
+                    border-radius: 4px;
+                }
+                ::-webkit-scrollbar-thumb:hover {
+                    background: rgba(16, 185, 129, 0.7);
+                }
+            `}</style>
         </div>
     );
 };
