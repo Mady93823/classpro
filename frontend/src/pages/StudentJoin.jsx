@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSocket } from '../hooks/useSocket';
 import CodeEditor from '../components/CodeEditor';
@@ -19,6 +19,10 @@ const StudentJoin = () => {
     const [studentId, setStudentId] = useState(null);
     const [isClassInactive, setIsClassInactive] = useState(false);
     const [isReconnecting, setIsReconnecting] = useState(true);
+
+    // Refs for CodeMirror editors
+    const htmlEditorRef = useRef(null);
+    const cssEditorRef = useRef(null);
 
     // Auto-reconnect on mount
     useEffect(() => {
@@ -154,17 +158,12 @@ const StudentJoin = () => {
     };
 
     const handleInsert = (char) => {
-        const textarea = document.activeElement;
-        if (textarea.tagName !== 'TEXTAREA') return;
+        // Use the appropriate editor ref based on active tab
+        const editorRef = activeTab === 'html' ? htmlEditorRef : cssEditorRef;
 
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const field = activeTab;
-
-        setCode(prev => ({
-            ...prev,
-            [field]: prev[field].substring(0, start) + char + prev[field].substring(end)
-        }));
+        if (editorRef.current) {
+            editorRef.current.insertText(char);
+        }
     };
 
     if (!joined) {
@@ -384,6 +383,7 @@ const StudentJoin = () => {
                 {activeTab === 'html' && (
                     <div className="h-full">
                         <CodeEditor
+                            ref={htmlEditorRef}
                             language="html"
                             value={code.html}
                             onChange={(value) => setCode({ ...code, html: value })}
@@ -393,6 +393,7 @@ const StudentJoin = () => {
                 {activeTab === 'css' && (
                     <div className="h-full">
                         <CodeEditor
+                            ref={cssEditorRef}
                             language="css"
                             value={code.css}
                             onChange={(value) => setCode({ ...code, css: value })}
